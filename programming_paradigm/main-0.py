@@ -3,19 +3,23 @@ import sys
 from bank_account import BankAccount
 
 def main():
-    # Starting balance (example)
     account = BankAccount(100)
 
-    # No command provided
     if len(sys.argv) < 2:
         print("Usage: python main-0.py <command>:<amount>")
-        print("Commands: deposit, withdraw, display")
         sys.exit(1)
 
-    # Parse command and optional amount
-    parts = sys.argv[1].split(":")
-    command = parts[0]
-    amount = float(parts[1]) if len(parts) > 1 else None
+    # Support both "withdraw:50" and "withdraw 50"
+    command = None
+    amount = None
+
+    if ":" in sys.argv[1]:
+        command, amount_str = sys.argv[1].split(":")
+        amount = float(amount_str)
+    else:
+        command = sys.argv[1]
+        if len(sys.argv) > 2:
+            amount = float(sys.argv[2])
 
     # Handle commands
     if command == "deposit" and amount is not None:
